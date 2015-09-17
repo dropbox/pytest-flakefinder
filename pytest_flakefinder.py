@@ -37,10 +37,26 @@ class FlakeFinderPlugin(object):
         if self.expires:
             self.expires = time.time() + self.expires * 60
 
-    @pytest.mark.trylast
+    @pytest.mark.tryfirst
+    def pytest_generate_tests(self, metafunc):
+        """For all true pytest tests use metafunc to add all the duplicates."""
+        # This is safer because otherwise test with fixtures might not be setup correctly.
+        for _ in xrange(self.flake_runs):
+            metafunc.addcall()
+        metafunc.function._pytest_duplicated = True
+
+    @pytest.mark.tryfirst
     def pytest_collection_modifyitems(self, items):
-        """Multiply those tests!"""
-        items[:] = items * self.flake_runs
+        """Add unitest tests to the collection."""
+        # Some tests (e.g. unittest.TestCase) don't pass through
+        # pytest_generate_tests. For those we use the old "add them multiple
+        # times to the items list" trick.
+        #
+        # Also we want to @tryfirst so that we go before randomizing the list.
+        for item in list(items):
+            if not getattr(item.function, '_pytest_duplicated', None):
+                items.extend([item] * (self.flake_runs - 1))
+            item.function._pytest_duplicated = True
 
     def pytest_runtest_call(self, item):
         # if we run out of time, skip the rest of the tests in
