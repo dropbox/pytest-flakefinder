@@ -8,6 +8,7 @@ DEFAULT_FLAKE_MINUTES = 0
 
 
 def pytest_addoption(parser):
+    """Add options for flakefinder plugin."""
     group = parser.getgroup('flakefinder')
 
     group.addoption("--flake-finder",

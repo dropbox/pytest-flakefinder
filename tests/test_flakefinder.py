@@ -1,7 +1,9 @@
+"""Tests for the flakefinder plugin."""
 import pytest
 import pytest_flakefinder
 
 def test_help_message(testdir):
+    """Test that the options don't change names."""
     result = testdir.runpytest(
         '--help',
     )
@@ -45,6 +47,7 @@ def test_repeat_success(testdir, flags, runs):
     (["--flake-runs=25"], 25),
 ])
 def test_unittest_repeats(testdir, flags, runs):
+    """Test that flake-finder works with unittest.TestCase."""
 
     # The test file.
     testdir.makepyfile("""
@@ -61,7 +64,8 @@ def test_unittest_repeats(testdir, flags, runs):
 
     # Check output.
     result.stdout.fnmatch_lines(
-        ['collecting ... collected 1 items'] + # unitest TestCases don't get duped correctly
+        # NB: unitest TestCases don't get increment the collected items.
+        ['collecting ... collected 1 items'] +
         ['*::TestAwesome::test PASSED' for i in range(runs)]
     )
     assert result.ret == 0
