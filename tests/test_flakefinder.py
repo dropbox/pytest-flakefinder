@@ -72,12 +72,13 @@ def test_unittest_repeats(testdir, flags, runs):
     ([], pytest_flakefinder.DEFAULT_FLAKE_RUNS),
 ])
 def test_flaky_test(testdir, flags, runs):
-    # This test will fail after being called 20 times.
+    """Test that flaky tests fail the tests."""
+    # This test will fail on the 20th call
     testdir.makepyfile("""
-        count = [0]
+        count = [-1]
         def test():
-            assert count[0] < 20
             count[0] += 1
+            assert count[0] != 20
     """)
 
     # Run pytest.
@@ -88,7 +89,8 @@ def test_flaky_test(testdir, flags, runs):
     result.stdout.fnmatch_lines(
         ['collecting ... collected %d items' % runs] +
         ['*::test?%d? PASSED' % i for i in range(min(runs, 20))] +
-        ['*::test?%d? FAILED' % i for i in range(20, runs)]
+        ['*::test?%d? FAILED' % i for i in range(20, min(runs, 21))] +
+        ['*::test?%d? PASSED' % i for i in range(21, runs)]
     )
     assert result.ret == 0 if runs < 20 else 1
 
