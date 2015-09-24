@@ -64,9 +64,9 @@ def test_unittest_repeats(testdir, flags, runs):
 
     # Check output.
     result.stdout.fnmatch_lines(
-        # NB: unitest TestCases don't get increment the collected items.
+        # NB: unitest TestCases don't increment the collected items.
         ['collecting ... collected 1 items'] +
-        ['*::TestAwesome::test PASSED' for i in range(runs)]
+        ['*::TestAwesome::test PASSED' for _ in range(runs)]
     )
     assert result.ret == 0
 
@@ -99,6 +99,7 @@ def test_flaky_test(testdir, flags, runs):
     assert result.ret == 0 if runs < 20 else 1
 
 def test_parametrized_tests(testdir):
+    """Test that parametrized tests get multiplied correctly too."""
     testdir.makepyfile("""
         import pytest
 
@@ -175,7 +176,10 @@ def test_flake_derived_classes(testdir):
 
     # Check output.
     result.stdout.fnmatch_lines(
-        ['collecting ... collected 2 items'] + # unitest TestCases don't get duped correctly
-        ['*::TestAwesome::runTest PASSED' for i in range(pytest_flakefinder.DEFAULT_FLAKE_RUNS)]
+        # NB: unitest TestCases don't increment the collected items.
+        ['collecting ... collected 2 items'] +
+        # The bug was that TestAwesome wouldn't run multiple times.
+        ['*::TestAwesome::runTest PASSED'
+         for _ in range(pytest_flakefinder.DEFAULT_FLAKE_RUNS)]
     )
     assert result.ret == 0
