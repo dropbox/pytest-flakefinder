@@ -151,3 +151,31 @@ def test_flake_max_minutes(testdir, minutes):
         ['*::test?%d? SKIPPED' % i for i in range(passing_runs, runs)]
     )
     assert result.ret == 0
+
+def test_flake_derived_classes(testdir):
+    """Tests that if two tests share the same function they still get duped properly."""
+
+    testdir.makepyfile("""
+    import unittest
+
+    class Base(object):
+        def runTest(self):
+            pass
+
+    class TestMoreAwesome(Base, unittest.TestCase):
+        pass
+
+    class TestAwesome(Base, unittest.TestCase):
+        pass
+    """)
+
+    # Run pytest.
+    flags = ['--flake-finder', '-v', '-k', 'TestAwesome']
+    result = testdir.runpytest(*flags)
+
+    # Check output.
+    result.stdout.fnmatch_lines(
+        ['collecting ... collected 2 items'] + # unitest TestCases don't get duped correctly
+        ['*::TestAwesome::runTest PASSED' for i in range(pytest_flakefinder.DEFAULT_FLAKE_RUNS)]
+    )
+    assert result.ret == 0

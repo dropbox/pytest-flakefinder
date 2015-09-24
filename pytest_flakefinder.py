@@ -66,7 +66,6 @@ class FlakeFinderPlugin(object):
         for item in list(items):
             if not getattr(item.function, '_pytest_duplicated', None):
                 items.extend([item] * (self.flake_runs - 1))
-            item.function._pytest_duplicated = True
 
     def pytest_runtest_call(self, item):
         """Skip tests if we've run out of time."""
