@@ -51,7 +51,7 @@ class FlakeFinderPlugin(object):
     def pytest_generate_tests(self, metafunc):
         """For all true pytest tests use metafunc to add all the duplicates."""
         # This is safer because otherwise test with fixtures might not be setup correctly.
-        for _ in xrange(self.flake_runs):
+        for _ in range(self.flake_runs):
             metafunc.addcall()
         metafunc.function._pytest_duplicated = True
 
