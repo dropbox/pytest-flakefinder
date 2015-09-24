@@ -1,0 +1,6 @@
+site_name: pytest-flakefinder
+site_description: Runs tests multiple times to expose flakiness.
+
+theme: readthedocs
+
+repo_url: https://github.com/deuresti/pytest-flakefinder
