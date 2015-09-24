@@ -115,3 +115,35 @@ def test_parametrized_tests(testdir):
          for x in [1, 5, 10]]
     )
     assert result.ret == 0
+
+@pytest.mark.parametrize("minutes", (1, 5, 10))
+def test_flake_max_minutes(testdir, minutes):
+    """Test --flake-max-minutes= option."""
+    # On the 10th iteration we monkey-patch time.time to advance time past the
+    # limit.
+    testdir.makepyfile("""
+        import time
+
+        count = [1]
+        def test():
+            if count[0] == 10:
+              cur_time = time.time()
+              # Move time 1 second past the limit at least.
+              time.time = lambda: cur_time + %d * 60 + 1
+            count[0] += 1
+    """ % minutes)
+
+    # Run pytest.
+    result = testdir.runpytest('--flake-finder', '-v', '--flake-max-minutes=%d' % minutes, '-s')
+
+    passing_runs = 10
+    runs = pytest_flakefinder.DEFAULT_FLAKE_RUNS
+
+    # Check output.
+    result.stdout.fnmatch_lines(
+        # fnmatch doesn't like `[` characters so I use `?`.
+        ['collecting ... collected %d items' % runs] +
+        ['*::test?%d? PASSED' % i for i in range(min(runs, passing_runs))] +
+        ['*::test?%d? SKIPPED' % i for i in range(passing_runs, runs)]
+    )
+    assert result.ret == 0
