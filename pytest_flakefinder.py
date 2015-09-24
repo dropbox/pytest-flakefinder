@@ -1,35 +1,44 @@
 """Run a test multiple times to see if it's flaky."""
 
-from __future__ import absolute_import
-
 import pytest
-
 import time
+
+DEFAULT_FLAKE_RUNS = 50
+DEFAULT_FLAKE_MINUTES = 0
 
 
 def pytest_addoption(parser):
-    """Register for arguments."""
     group = parser.getgroup('flakefinder')
-    group.addoption("--flake-finder", dest="flake_finder_enable",
-                    action='store_true', default=False,
-                    help="Enable flake finder.  This will create multiple copies of all the selected tests.")
-    group.addoption("--no-flake-finder", dest="flake_finder_enable", action='store_false')
-    group.addoption("--flake-max-minutes", dest="flake_max_minutes", default=0, type=int, action="store",
-                    help="Don't run for longer than this parameter. Default is 0, which is no limit")
-    group.addoption("--flake-runs", metavar="flake_runs",
-                    action='store', dest="flake_runs", type=int, default=50)
+
+    group.addoption("--flake-finder",
+                    action='store_true',
+                    dest="flake_finder_enable",
+                    default=False,
+                    help="create multiple copies of all the selected tests.")
+    group.addoption("--flake-max-minutes",
+                    action="store",
+                    dest="flake_max_minutes",
+                    default=DEFAULT_FLAKE_MINUTES,
+                    type=int,
+                    metavar="minutes",
+                    help="Don't run for longer than this parameter. (default: %default)")
+    group.addoption("--flake-runs",
+                    action='store',
+                    dest="flake_runs",
+                    default=DEFAULT_FLAKE_RUNS,
+                    type=int,
+                    metavar="runs",
+                    help="number of times to repeat the tests. (default: %default)")
+
 
 def pytest_configure(config):
     """Register the plugin if needed."""
     if config.getoption('flake_finder_enable'):
         config.pluginmanager.register(FlakeFinderPlugin(config))
 
-class FlakeFinderPlugin(object):
-    """This is the flake finder plugin.  It multiplies all selected tests by flake_runs.
 
-    Args:
-       config: The config values passed to the plugin.
-    """
+class FlakeFinderPlugin(object):
+    """This is a pytest plugin that multiplies all selected tests by `flake_runs`."""
 
     def __init__(self, config):
         self.flake_runs = config.getoption('flake_runs')
@@ -59,7 +68,6 @@ class FlakeFinderPlugin(object):
             item.function._pytest_duplicated = True
 
     def pytest_runtest_call(self, item):
-        # if we run out of time, skip the rest of the tests in
-        # the test plan
+        """Skip tests if we've run out of time."""
         if self.expires and self.expires < time.time():
             pytest.skip("time bound exceeded")
