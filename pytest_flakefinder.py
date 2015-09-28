@@ -16,13 +16,6 @@ def pytest_addoption(parser):
                     dest="flake_finder_enable",
                     default=False,
                     help="create multiple copies of all the selected tests.")
-    group.addoption("--flake-max-minutes",
-                    action="store",
-                    dest="flake_max_minutes",
-                    default=DEFAULT_FLAKE_MINUTES,
-                    type=int,
-                    metavar="minutes",
-                    help="Don't run for longer than this parameter. (default: %default)")
     group.addoption("--flake-runs",
                     action='store',
                     dest="flake_runs",
@@ -30,7 +23,13 @@ def pytest_addoption(parser):
                     type=int,
                     metavar="runs",
                     help="number of times to repeat the tests. (default: %default)")
-
+    group.addoption("--flake-max-minutes",
+                    action="store",
+                    dest="flake_max_minutes",
+                    default=DEFAULT_FLAKE_MINUTES,
+                    type=int,
+                    metavar="minutes",
+                    help="Don't run for longer than this parameter. (default: %default)")
 
 def pytest_configure(config):
     """Register the plugin if needed."""

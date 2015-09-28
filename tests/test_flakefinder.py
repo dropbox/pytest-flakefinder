@@ -11,8 +11,8 @@ def test_help_message(testdir):
     result.stdout.fnmatch_lines([
         'flakefinder:',
         '*--flake-finder*',
-        '*--flake-max-minutes=minutes*',
         '*--flake-runs=runs*',
+        '*--flake-max-minutes=minutes*',
     ])
 
 @pytest.mark.parametrize("flags, runs", [
