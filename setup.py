@@ -19,7 +19,7 @@ setup(
     maintainer='David Euresti',
     maintainer_email='david@dropbox.com',
     license='MIT',
-    url='https://github.com/deuresti/pytest-flakefinder',
+    url='https://github.com/dropbox/pytest-flakefinder',
     description='Runs tests multiple times to expose flakiness.',
     long_description=read('README.rst'),
     py_modules=['pytest_flakefinder'],

@@ -1,10 +1,6 @@
 pytest-flakefinder
 ===================================
 
-.. image:: https://travis-ci.org/deuresti/pytest-flakefinder.svg?branch=master
-    :target: https://travis-ci.org/deuresti/pytest-flakefinder
-    :alt: Build Status
-
 Runs tests multiple times to expose flakiness.
 
 ----
@@ -85,6 +81,6 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 .. _`@hackebrot`: https://github.com/hackebrot
 .. _`MIT License`: http://opensource.org/licenses/MIT
 .. _`cookiecutter-pytest-plugin`: https://github.com/pytest-dev/cookiecutter-pytest-plugin
-.. _`file an issue`: https://github.com/deuresti/pytest-flakefinder/issues
+.. _`file an issue`: https://github.com/dropbox/pytest-flakefinder/issues
 .. _`pytest`: https://github.com/pytest-dev/pytest
 .. _`tox`: https://tox.readthedocs.org/en/latest/
