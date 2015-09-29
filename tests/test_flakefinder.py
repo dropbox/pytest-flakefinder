@@ -129,13 +129,23 @@ def test_flake_max_minutes(testdir, minutes):
     testdir.makepyfile("""
         import time
 
-        count = [1]
-        def test():
-            if count[0] == 10:
-              cur_time = time.time()
-              # Move time 1 second past the limit at least.
-              time.time = lambda: cur_time + %d * 60 + 1
-            count[0] += 1
+        class TestTimePatch(object):
+
+            def setup_class(cls):
+                cls.count = 1
+                cls.orig_time = time.time
+
+            def teardown_class(cls):
+                # Put back the old time when the test is over.  That way we
+                # don't report the tests as taking 900 seconds.
+                time.time = cls.orig_time
+
+            def test(self):
+                if TestTimePatch.count == 10:
+                    cur_time = time.time()
+                    # Move time 1 second past the limit at least.
+                    time.time = lambda: cur_time + %d * 60 + 1
+                TestTimePatch.count += 1
     """ % minutes)
 
     # Run pytest.
@@ -149,7 +159,9 @@ def test_flake_max_minutes(testdir, minutes):
         # fnmatch doesn't like `[` characters so I use `?`.
         ['collecting ... collected %d items' % runs] +
         ['*::test?%d? PASSED' % i for i in range(min(runs, passing_runs))] +
-        ['*::test?%d? SKIPPED' % i for i in range(passing_runs, runs)]
+        ['*::test?%d? SKIPPED' % i for i in range(passing_runs, runs)] +
+        # Test for the test, make sure the time isn't modified when coming out.
+        ['* 10 passed, 40 skipped in ?.?? seconds *']
     )
     assert result.ret == 0
 
