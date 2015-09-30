@@ -18,7 +18,7 @@ setup(
     author_email='david@dropbox.com',
     maintainer='David Euresti',
     maintainer_email='david@dropbox.com',
-    license='MIT',
+    license='Apache',
     url='https://github.com/dropbox/pytest-flakefinder',
     description='Runs tests multiple times to expose flakiness.',
     long_description=read('README.rst'),
@@ -30,7 +30,7 @@ setup(
         'Topic :: Software Development :: Testing',
         'Programming Language :: Python',
         'Operating System :: OS Independent',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
     ],
     entry_points={
         'pytest11': [
