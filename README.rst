@@ -1,6 +1,10 @@
 pytest-flakefinder
 ===================================
 
+.. image:: https://travis-ci.org/dropbox/pytest-flakefinder.png?branch=master
+    :alt: Build Status
+    :target: https://travis-ci.org/dropbox/pytest-flakefinder
+
 Runs tests multiple times to expose flakiness.
 
 ----
