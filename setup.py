@@ -23,7 +23,7 @@ setup(
     description='Runs tests multiple times to expose flakiness.',
     long_description=read('README.rst'),
     py_modules=['pytest_flakefinder'],
-    install_requires=['pytest>=2.7.2'],
+    install_requires=['pytest>=2.7.1'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
