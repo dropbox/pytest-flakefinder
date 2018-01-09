@@ -162,7 +162,7 @@ def test_flake_max_minutes(testdir, minutes):
         ['*::test?%d? PASSED*' % i for i in range(min(runs, passing_runs))] +
         ['*::test?%d? SKIPPED*' % i for i in range(passing_runs, runs)] +
         # Test for the test, make sure the time isn't modified when coming out.
-        ['* 10 passed, 40 skipped, * in ?.?? seconds *']
+        ['* 10 passed, 40 skipped* in ?.?? seconds *']
     )
     assert result.ret == 0
 
