@@ -52,9 +52,9 @@ class FlakeFinderPlugin(object):
         # This is safer because otherwise test with fixtures might not be setup correctly.
         # Parameterization requires the test function to accept the permutation as
         # either an argument or depend on it as a fixture. Use fixture so the test
-        # function signature is not changed. Suffix with timestamp to reduce odds of
-        # collision with other fixture names.
-        fixture_name = 'flakefinder-{}'.format(time.time())
+        # function signature is not changed. Prefix with underscores and suffix with
+        # function name to reduce odds of collision with other fixture names.
+        fixture_name = '__flakefinder_{}'.format(metafunc.function.__name__)
         metafunc.fixturenames.append(fixture_name)
         metafunc.parametrize(
             argnames=fixture_name,
