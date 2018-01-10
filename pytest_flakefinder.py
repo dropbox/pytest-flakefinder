@@ -50,8 +50,16 @@ class FlakeFinderPlugin(object):
     def pytest_generate_tests(self, metafunc):
         """For all true pytest tests use metafunc to add all the duplicates."""
         # This is safer because otherwise test with fixtures might not be setup correctly.
-        for _ in range(self.flake_runs):
-            metafunc.addcall()
+        # Parameterization requires the test function to accept the permutation as
+        # either an argument or depend on it as a fixture. Use fixture so the test
+        # function signature is not changed. Prefix with underscores and suffix with
+        # function name to reduce odds of collision with other fixture names.
+        fixture_name = '__flakefinder_{}'.format(metafunc.function.__name__)
+        metafunc.fixturenames.append(fixture_name)
+        metafunc.parametrize(
+            argnames=fixture_name,
+            argvalues=list(range(self.flake_runs)),
+        )
         metafunc.function._pytest_duplicated = True
 
     @pytest.mark.tryfirst

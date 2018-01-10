@@ -35,7 +35,7 @@ def test_repeat_success(testdir, flags, runs):
 
     # Check output.
     result.stdout.fnmatch_lines(
-        # Wildcard at end because latest pytest pluralizes 'item'
+        # Wildcard at end because different Python+pytest combos pluralize 'item'
         ['collecting ... collected %d item*' % runs] +
         # fnmatch doesn't like `[` characters so I use `?`.
         ['*::test?%d? PASSED*' % i for i in range(runs)]
@@ -66,6 +66,7 @@ def test_unittest_repeats(testdir, flags, runs):
     # Check output.
     result.stdout.fnmatch_lines(
         # NB: unitest TestCases don't increment the collected items.
+        # Wildcard at end because different Python+pytest combos pluralize 'item'
         ['collecting ... collected 1 item*'] +
         ['*::TestAwesome::test PASSED*' for _ in range(runs)]
     )
@@ -162,7 +163,7 @@ def test_flake_max_minutes(testdir, minutes):
         ['*::test?%d? PASSED*' % i for i in range(min(runs, passing_runs))] +
         ['*::test?%d? SKIPPED*' % i for i in range(passing_runs, runs)] +
         # Test for the test, make sure the time isn't modified when coming out.
-        ['* 10 passed, 40 skipped* in ?.?? seconds *']
+        ['* 10 passed, 40 skipped in ?.?? seconds *']
     )
     assert result.ret == 0
 
@@ -194,5 +195,35 @@ def test_flake_derived_classes(testdir):
         # The bug was that TestAwesome wouldn't run multiple times.
         ['*::TestAwesome::runTest PASSED*'
          for _ in range(pytest_flakefinder.DEFAULT_FLAKE_RUNS)]
+    )
+    assert result.ret == 0
+
+def test_fixture_parametrization_with_similar_test_names(testdir):
+    """
+    Ensure tests with the same name in diff namespaces do not cause overloading of
+    flake runs.
+    """
+    testdir.makepyfile("""
+    class TestA(object):
+        def test_something(self):
+            pass
+    
+    class TestB(object):
+        def test_something(self):
+            pass
+    
+    def test_something():
+        pass
+    """)
+
+    # Run pytest.
+    flags = ['--flake-finder', '-v']
+    result = testdir.runpytest(*flags)
+
+    # Check output.
+    num_runs = pytest_flakefinder.DEFAULT_FLAKE_RUNS
+    result.stdout.fnmatch_lines(
+        ['collecting ... collected 150 items'] +
+        ['*::test_something?%d? PASSED*' % i for i in range(num_runs)]
     )
     assert result.ret == 0
