@@ -70,6 +70,12 @@ Contributing
 Contributions are very welcome. Tests can be run with `tox`_, please ensure
 the coverage at least stays the same before you submit a pull request.
 
+Contributors
+------------
+- euresti_
+- nipunn1313_
+- goodspark_
+
 
 Issues
 ------
@@ -82,3 +88,6 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 .. _`file an issue`: https://github.com/dropbox/pytest-flakefinder/issues
 .. _`pytest`: https://github.com/pytest-dev/pytest
 .. _`tox`: https://tox.readthedocs.org/en/latest/
+.. _euresti: https://github.com/euresti
+.. _nipunn1313: https://github.com/nipunn1313
+.. _goodspark: https://github.com/goodspark
