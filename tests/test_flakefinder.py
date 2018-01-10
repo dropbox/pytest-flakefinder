@@ -66,7 +66,7 @@ def test_unittest_repeats(testdir, flags, runs):
     # Check output.
     result.stdout.fnmatch_lines(
         # NB: unitest TestCases don't increment the collected items.
-        ['collecting ... collected 1 item'] +
+        ['collecting ... collected 1 item*'] +
         ['*::TestAwesome::test PASSED*' for _ in range(runs)]
     )
     assert result.ret == 0
