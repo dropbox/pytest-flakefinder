@@ -35,9 +35,10 @@ def test_repeat_success(testdir, flags, runs):
 
     # Check output.
     result.stdout.fnmatch_lines(
-        ['collecting ... collected %d items' % runs] +
+        # Wildcard at end because latest pytest pluralizes 'item'
+        ['collecting ... collected %d item*' % runs] +
         # fnmatch doesn't like `[` characters so I use `?`.
-        ['*::test?%d? PASSED' % i for i in range(runs)]
+        ['*::test?%d? PASSED*' % i for i in range(runs)]
     )
     assert result.ret == 0
 
@@ -65,8 +66,8 @@ def test_unittest_repeats(testdir, flags, runs):
     # Check output.
     result.stdout.fnmatch_lines(
         # NB: unitest TestCases don't increment the collected items.
-        ['collecting ... collected 1 items'] +
-        ['*::TestAwesome::test PASSED' for _ in range(runs)]
+        ['collecting ... collected 1 item*'] +
+        ['*::TestAwesome::test PASSED*' for _ in range(runs)]
     )
     assert result.ret == 0
 
@@ -92,9 +93,9 @@ def test_flaky_test(testdir, flags, runs):
     # Check output.
     result.stdout.fnmatch_lines(
         ['collecting ... collected %d items' % runs] +
-        ['*::test?%d? PASSED' % i for i in range(min(runs, 20))] +
-        ['*::test?%d? FAILED' % i for i in range(20, min(runs, 21))] +
-        ['*::test?%d? PASSED' % i for i in range(21, runs)]
+        ['*::test?%d? PASSED*' % i for i in range(min(runs, 20))] +
+        ['*::test?%d? FAILED*' % i for i in range(20, min(runs, 21))] +
+        ['*::test?%d? PASSED*' % i for i in range(21, runs)]
     )
     assert result.ret == 0 if runs < 20 else 1
 
@@ -115,7 +116,7 @@ def test_parametrized_tests(testdir):
     # Check output.
     result.stdout.fnmatch_lines(
         ['collecting ... collected 150 items'] +
-        ['*::test?%d-%d? PASSED' % (i, x)
+        ['*::test?%d-%d? PASSED*' % (i, x)
          for i in range(pytest_flakefinder.DEFAULT_FLAKE_RUNS)
          for x in [1, 5, 10]]
     )
@@ -158,10 +159,10 @@ def test_flake_max_minutes(testdir, minutes):
     result.stdout.fnmatch_lines(
         # fnmatch doesn't like `[` characters so I use `?`.
         ['collecting ... collected %d items' % runs] +
-        ['*::test?%d? PASSED' % i for i in range(min(runs, passing_runs))] +
-        ['*::test?%d? SKIPPED' % i for i in range(passing_runs, runs)] +
+        ['*::test?%d? PASSED*' % i for i in range(min(runs, passing_runs))] +
+        ['*::test?%d? SKIPPED*' % i for i in range(passing_runs, runs)] +
         # Test for the test, make sure the time isn't modified when coming out.
-        ['* 10 passed, 40 skipped in ?.?? seconds *']
+        ['* 10 passed, 40 skipped* in ?.?? seconds *']
     )
     assert result.ret == 0
 
@@ -191,7 +192,7 @@ def test_flake_derived_classes(testdir):
         # NB: unitest TestCases don't increment the collected items.
         ['collecting ... collected 2 items'] +
         # The bug was that TestAwesome wouldn't run multiple times.
-        ['*::TestAwesome::runTest PASSED'
+        ['*::TestAwesome::runTest PASSED*'
          for _ in range(pytest_flakefinder.DEFAULT_FLAKE_RUNS)]
     )
     assert result.ret == 0
