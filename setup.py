@@ -13,11 +13,11 @@ def read(fname):
 
 setup(
     name='pytest-flakefinder',
-    version='0.1.0',
+    version='0.1.1',
     author='David Euresti',
-    author_email='david@dropbox.com',
-    maintainer='David Euresti',
-    maintainer_email='david@dropbox.com',
+    author_email='david@euresti.com',
+    maintainer='Nipunn Koorapati',
+    maintainer_email='nipunn@dropbox.com',
     license='Apache',
     url='https://github.com/dropbox/pytest-flakefinder',
     description='Runs tests multiple times to expose flakiness.',
