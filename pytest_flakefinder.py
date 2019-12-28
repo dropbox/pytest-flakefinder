@@ -1,5 +1,6 @@
 """Run a test multiple times to see if it's flaky."""
 
+import copy
 import pytest
 import time
 
@@ -72,7 +73,8 @@ class FlakeFinderPlugin(object):
         # Also we want to @tryfirst so that we go before randomizing the list.
         for item in list(items):
             if not getattr(item.function, '_pytest_duplicated', None):
-                items.extend([item] * (self.flake_runs - 1))
+                for _ in range(self.flake_runs - 1):
+                    items.append(copy.copy(item))
 
     def pytest_runtest_call(self, item):
         """Skip tests if we've run out of time."""
