@@ -58,3 +58,4 @@ target/
 
 # Text Editor Stuff
 *~
+.*.swp
