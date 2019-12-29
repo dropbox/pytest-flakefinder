@@ -73,8 +73,13 @@ class FlakeFinderPlugin(object):
         # Also we want to @tryfirst so that we go before randomizing the list.
         for item in list(items):
             if not getattr(item.function, '_pytest_duplicated', None):
-                for _ in range(self.flake_runs - 1):
-                    items.append(copy.copy(item))
+                for i in range(self.flake_runs - 1):
+                    cpy = copy.copy(item)
+                    # HAX
+                    # Ensure initialization for the copied request works for _pytest.TestCaseFunction
+                    # without this, funcargs ends up being None
+                    cpy._initrequest()
+                    items.append(cpy)
 
     def pytest_runtest_call(self, item):
         """Skip tests if we've run out of time."""
