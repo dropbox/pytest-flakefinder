@@ -42,7 +42,6 @@ def test_repeat_success(testdir, flags, runs):
     )
     assert result.ret == 0
 
-@pytest.mark.skipif(int(pytest.__version__.split('.')[0]) > 3, reason="unittest functionality stopped working at v4")
 @pytest.mark.parametrize("flags, runs", [
     ([], pytest_flakefinder.DEFAULT_FLAKE_RUNS),
     (["--flake-runs=1"], 1),
@@ -168,7 +167,6 @@ def test_flake_max_minutes(testdir, minutes):
     )
     assert result.ret == 0
 
-@pytest.mark.skipif(int(pytest.__version__.split('.')[0]) > 3, reason="unittest functionality stopped working at v4")
 def test_flake_derived_classes(testdir):
     """Tests that if two tests share the same function they still get duped properly."""
 
