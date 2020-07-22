@@ -38,19 +38,19 @@ Flake Finding
 
 Enable plugin for tests::
 
-    py.test --flake-finder
+    pytest --flake-finder
 
 This will run every test the default, 50, times.  Every test is run independently and you can even use xdist to send tests to multiple processes.
 
 To configure the number of runs::
 
-    py.test --flake-finder --flake-runs=runs
+    pytest --flake-finder --flake-runs=runs
 
 To find flakes in one test or a couple of tests you can use pytest's built in test selectiong.
 
 Finding flakes in one test::
 
-    py.test -k test_maybe_flaky --flake-finder
+    pytest -k test_maybe_flaky --flake-finder
 
 When used with xdist the flake finder can expose many timing related flakes.
 
@@ -61,7 +61,7 @@ When using flake-finder as part of a CI run it might be useful to limit the amou
 
 Running with timeout::
 
-    py.test --flake-finder --flake-max-minutes=minutes
+    pytest --flake-finder --flake-max-minutes=minutes
 
 Tests started after the timeout will be skipped.
 
