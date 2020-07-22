@@ -24,6 +24,7 @@ setup(
     long_description=read('README.rst'),
     py_modules=['pytest_flakefinder'],
     install_requires=['pytest>=2.7.1'],
+    python_requires='>=3.5',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
