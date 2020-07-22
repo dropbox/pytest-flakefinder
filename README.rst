@@ -75,6 +75,7 @@ Contributors
 - euresti_
 - nipunn1313_
 - goodspark_
+- and-semakin_
 
 
 Issues
@@ -91,3 +92,4 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 .. _euresti: https://github.com/euresti
 .. _nipunn1313: https://github.com/nipunn1313
 .. _goodspark: https://github.com/goodspark
+.. _and-semakin: https://github.com/and-semakin
