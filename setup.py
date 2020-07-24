@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-flakefinder',
-    version='0.1.3',
+    version='1.0.0',
     author='David Euresti',
     author_email='david@euresti.com',
     maintainer='Nipunn Koorapati',
