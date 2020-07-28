@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-flakefinder',
-    version='0.1.3',
+    version='1.0.0',
     author='David Euresti',
     author_email='david@euresti.com',
     maintainer='Nipunn Koorapati',
@@ -24,11 +24,13 @@ setup(
     long_description=read('README.rst'),
     py_modules=['pytest_flakefinder'],
     install_requires=['pytest>=2.7.1'],
+    python_requires='>=3.5',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Testing',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
     ],
