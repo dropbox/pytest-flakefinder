@@ -74,6 +74,7 @@ Contributors
 - nipunn1313_
 - goodspark_
 - and-semakin_
+- adaamz_
 
 
 Issues
@@ -91,3 +92,4 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 .. _nipunn1313: https://github.com/nipunn1313
 .. _goodspark: https://github.com/goodspark
 .. _and-semakin: https://github.com/and-semakin
+.. _adaamz: https://github.com/adaamz
