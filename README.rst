@@ -22,9 +22,7 @@ Features
 Installation
 ------------
 
-Install with setup.py::
-
-    python setup.py install
+    pip install pytest-flakefinder
 
 For best flake-finding combine with pytest-xdist::
 
