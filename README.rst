@@ -44,7 +44,7 @@ To configure the number of runs::
 
     pytest --flake-finder --flake-runs=runs
 
-To find flakes in one test or a couple of tests you can use pytest's built in test selectiong.
+To find flakes in one test or a couple of tests you can use pytest's built in test selection.
 
 Finding flakes in one test::
 
