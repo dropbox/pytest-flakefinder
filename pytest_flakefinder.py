@@ -74,7 +74,7 @@ class FlakeFinderPlugin(object):
         # Also we want to @tryfirst so that we go before randomizing the list.
         for item in list(items):
             if not getattr(item.function, '_pytest_duplicated', None):
-                for i in range(self.flake_runs - 1):
+                for _ in range(self.flake_runs - 1):
                     cpy = copy.copy(item)
                     # HAX
                     # Ensure initialization for the copied request works for _pytest.TestCaseFunction
