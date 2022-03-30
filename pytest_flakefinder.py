@@ -1,8 +1,9 @@
 """Run a test multiple times to see if it's flaky."""
 
 import copy
-import pytest
 import time
+
+import pytest
 
 DEFAULT_FLAKE_RUNS = 50
 DEFAULT_FLAKE_MINUTES = 0
@@ -10,31 +11,38 @@ DEFAULT_FLAKE_MINUTES = 0
 
 def pytest_addoption(parser):
     """Add options for flakefinder plugin."""
-    group = parser.getgroup('flakefinder')
+    group = parser.getgroup("flakefinder")
 
-    group.addoption("--flake-finder",
-                    action='store_true',
-                    dest="flake_finder_enable",
-                    default=False,
-                    help="create multiple copies of all the selected tests.")
-    group.addoption("--flake-runs",
-                    action='store',
-                    dest="flake_runs",
-                    default=DEFAULT_FLAKE_RUNS,
-                    type=int,
-                    metavar="runs",
-                    help="number of times to repeat the tests. (default: %default)")
-    group.addoption("--flake-max-minutes",
-                    action="store",
-                    dest="flake_max_minutes",
-                    default=DEFAULT_FLAKE_MINUTES,
-                    type=int,
-                    metavar="minutes",
-                    help="Don't run for longer than this parameter. (default: %default)")
+    group.addoption(
+        "--flake-finder",
+        action="store_true",
+        dest="flake_finder_enable",
+        default=False,
+        help="create multiple copies of all the selected tests.",
+    )
+    group.addoption(
+        "--flake-runs",
+        action="store",
+        dest="flake_runs",
+        default=DEFAULT_FLAKE_RUNS,
+        type=int,
+        metavar="runs",
+        help="number of times to repeat the tests. (default: %(default)s)",
+    )
+    group.addoption(
+        "--flake-max-minutes",
+        action="store",
+        dest="flake_max_minutes",
+        default=DEFAULT_FLAKE_MINUTES,
+        type=int,
+        metavar="minutes",
+        help="Don't run for longer than this parameter. (default: %(default)s)",
+    )
+
 
 def pytest_configure(config):
     """Register the plugin if needed."""
-    if config.getoption('flake_finder_enable'):
+    if config.getoption("flake_finder_enable"):
         config.pluginmanager.register(FlakeFinderPlugin(config))
 
 
@@ -42,8 +50,8 @@ class FlakeFinderPlugin(object):
     """This is a pytest plugin that multiplies all selected tests by `flake_runs`."""
 
     def __init__(self, config):
-        self.flake_runs = config.getoption('flake_runs')
-        self.expires = config.getoption('flake_max_minutes')
+        self.flake_runs = config.getoption("flake_runs")
+        self.expires = config.getoption("flake_max_minutes")
         if self.expires:
             self.expires = time.time() + self.expires * 60
 
@@ -55,7 +63,7 @@ class FlakeFinderPlugin(object):
         # either an argument or depend on it as a fixture. Use fixture so the test
         # function signature is not changed. Prefix with underscores and suffix with
         # function name to reduce odds of collision with other fixture names.
-        fixture_name = '__flakefinder_{}'.format(metafunc.function.__name__)
+        fixture_name = "__flakefinder_{}".format(metafunc.function.__name__)
         metafunc.fixturenames.append(fixture_name)
         metafunc.parametrize(
             argnames=fixture_name,
@@ -72,8 +80,8 @@ class FlakeFinderPlugin(object):
         #
         # Also we want to @tryfirst so that we go before randomizing the list.
         for item in list(items):
-            if not getattr(item.function, '_pytest_duplicated', None):
-                for i in range(self.flake_runs - 1):
+            if not getattr(item.function, "_pytest_duplicated", None):
+                for _ in range(self.flake_runs - 1):
                     cpy = copy.copy(item)
                     # HAX
                     # Ensure initialization for the copied request works for _pytest.TestCaseFunction
