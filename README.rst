@@ -75,6 +75,8 @@ Contributors
 - goodspark_
 - and-semakin_
 - adaamz_
+- ZoltanDominguez_
+- MuslimBeibytuly_
 
 
 Issues
@@ -93,3 +95,5 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 .. _goodspark: https://github.com/goodspark
 .. _and-semakin: https://github.com/and-semakin
 .. _adaamz: https://github.com/adaamz
+.. _ZoltanDominguez: https://github.com/ZoltanDominguez
+.. _MuslimBeibytuly: https://github.com/MuslimBeibytuly
