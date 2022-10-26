@@ -55,7 +55,7 @@ class FlakeFinderPlugin(object):
         if self.expires:
             self.expires = time.time() + self.expires * 60
 
-    @pytest.mark.tryfirst
+    @pytest.hookimpl(tryfirst=True)
     def pytest_generate_tests(self, metafunc):
         """For all true pytest tests use metafunc to add all the duplicates."""
         # This is safer because otherwise test with fixtures might not be setup correctly.
@@ -71,7 +71,7 @@ class FlakeFinderPlugin(object):
         )
         metafunc.function._pytest_duplicated = True
 
-    @pytest.mark.tryfirst
+    @pytest.hookimpl(tryfirst=True)
     def pytest_collection_modifyitems(self, items):
         """Add unitest tests to the collection."""
         # Some tests (e.g. unittest.TestCase) don't pass through
